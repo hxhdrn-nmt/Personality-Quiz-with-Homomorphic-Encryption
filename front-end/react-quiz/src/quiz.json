@@ -1,0 +1,20 @@
+{
+    "title": "How much do you think like a cryptanalyst?",
+    "questions": [
+        {
+            "question": "You're reading a book and a character says something you don't understand. You:",
+            "answers": [
+                "immediately try to figure out what it's hinting at",
+                "must have missed something earlier, or it's written confusingly",
+                "figure it's something that hasn't been explained yet and keep reading"
+            ]
+        },
+        {
+            "question": "Your friend asks you what you think of their project. You generally like it, but you see some potential problems. You:",
+            "answers": [
+                "just say nice things—you're their friend, it's your job to support them, not criticize them",
+                "give them the feedback—it doesn't help them make it better if you don't tell them how it could improve"
+            ]
+        }
+    ]
+}

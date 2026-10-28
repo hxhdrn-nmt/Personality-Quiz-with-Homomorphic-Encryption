@@ -1,0 +1,110 @@
+{
+   "checksum": "be2e31280e50fe6877f6e45dc82afb71",
+   "roots": {
+      "bookmark_bar": {
+         "children": [  ],
+         "date_added": "13437167223204142",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "0bc5d13f-2cba-5d74-951f-3f233fe6c908",
+         "id": "1",
+         "name": "Bookmarks bar",
+         "type": "folder"
+      },
+      "custom_root": {
+         "pinboard": {
+            "children": [  ],
+            "date_added": "13437167223204574",
+            "date_last_used": "0",
+            "date_modified": "0",
+            "guid": "00000000-0000-4000-a000-000000000907",
+            "id": "7",
+            "name": "Pinboard",
+            "type": "folder"
+         },
+         "speedDial": {
+            "children": [ {
+               "children": [  ],
+               "date_added": "13437167227977025",
+               "date_last_used": "0",
+               "date_modified": "13437167227977025",
+               "guid": "523d6cc2-7742-41b5-9ae6-812289d7454f",
+               "id": "10",
+               "meta_info": {
+                  "speed_dial_root_folder_guid": "28c14396-f59b-45a7-b116-a7c50ae84c27"
+               },
+               "name": "DESKTOP-DR07NVU",
+               "type": "folder"
+            } ],
+            "date_added": "13437167223204572",
+            "date_last_used": "0",
+            "date_modified": "0",
+            "guid": "00000000-0000-4000-a000-000000000904",
+            "id": "6",
+            "name": "Speed Dials",
+            "type": "folder"
+         },
+         "trash": {
+            "children": [  ],
+            "date_added": "13437167223204577",
+            "date_last_used": "0",
+            "date_modified": "0",
+            "guid": "00000000-0000-4000-a000-000000000905",
+            "id": "9",
+            "name": "Trash",
+            "type": "folder"
+         },
+         "unsorted": {
+            "children": [  ],
+            "date_added": "13437167223204567",
+            "date_last_used": "0",
+            "date_modified": "0",
+            "guid": "00000000-0000-4000-a000-000000000901",
+            "id": "4",
+            "name": "Unsorted bookmarks",
+            "type": "folder"
+         },
+         "unsyncedPinboard": {
+            "children": [  ],
+            "date_added": "13437167223204576",
+            "date_last_used": "0",
+            "date_modified": "0",
+            "guid": "00000000-0000-4000-a000-000000000908",
+            "id": "8",
+            "name": "Unsynchronized Pinboard",
+            "type": "folder"
+         },
+         "userRoot": {
+            "children": [  ],
+            "date_added": "13437167223204570",
+            "date_last_used": "0",
+            "date_modified": "0",
+            "guid": "00000000-0000-4000-a000-000000000902",
+            "id": "5",
+            "name": "Other bookmarks",
+            "type": "folder"
+         }
+      },
+      "other": {
+         "children": [  ],
+         "date_added": "13437167223204142",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "82b081ec-3dd3-529c-8475-ab6c344590dd",
+         "id": "2",
+         "name": "Imported bookmarks",
+         "type": "folder"
+      },
+      "synced": {
+         "children": [  ],
+         "date_added": "13437167223204142",
+         "date_last_used": "0",
+         "date_modified": "0",
+         "guid": "4cf2e351-0e85-532b-bb37-df045d8f8d0f",
+         "id": "3",
+         "name": "Mobile bookmarks",
+         "type": "folder"
+      }
+   },
+   "version": 1
+}
