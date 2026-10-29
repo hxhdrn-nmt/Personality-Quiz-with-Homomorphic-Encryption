@@ -40,12 +40,24 @@ function QuizResults(result: {vals: number[]}) {
 
 // The quiz including all its questions and answers
 function Quiz() {
-  const { onChange, onSubmit, values } = useForm(quizSubmitCallback); // form state with listeners & value array (custom state defined in useForm.tsx)
-  const [isSubmitted, setSubmitted] = useState(false); // boolean state value with setter
+  const { onChange, onSubmit, values } = useForm(quizChangeCallback, quizSubmitCallback); // form state with listeners & value array (custom state defined in useForm.tsx)
+  const [showResults, setShowResults] = useState(false); // boolean state value with setter for whether quiz has been submitted
+  const [errorMsg, setErrorMsg] = useState(""); // string state value (show error if not empty)
 
   // called when the quiz is submitted
   async function quizSubmitCallback () {
-    setSubmitted(true);
+    if (values.length < quiz.questions.length) {
+      setErrorMsg("You must fill out all the questions to submit!");
+    }
+    else {
+      setShowResults(true);
+    }
+  }
+
+  // called when any answer in the quiz is changed
+  async function quizChangeCallback() {
+    setShowResults(false); // stop showing the result if the values get changed (they need to resubmit)
+    setErrorMsg(""); // also remove the error
   }
 
   // converts json answers into answer data for the Answer component
@@ -70,7 +82,10 @@ function Quiz() {
       </form>
 
       {/* only show quiz results after submit button clicked (lazy eval && does this) */}
-      {isSubmitted && <QuizResults vals={values} /> }
+      {showResults && <QuizResults vals={values} /> }
+
+      {/* show error message if error is set */}
+      {errorMsg != "" && <p>{errorMsg}</p>}
     </>
   );
 }
