@@ -1,3 +1,6 @@
+import {randomBytes} from "node:crypto";
+// TODO: Push changes after verifying everything works as it should be.
+
 // Public key pair: (n, g), although technically (n, n^2, g) for this implementation.
 // Private key pair: (lambda, mu)
 
@@ -8,16 +11,9 @@
 * I'm using the commandline commands "npx tsx <filename.ts>" to run this, hopefully this doesn't cause issues on your end and lmk if it does.
 */
 
-// Hard coded values for controlled testing.
-// First big prime (1024 bits).
-const p: bigint = 152554835228812668185792564298635128851884527386913890692824523018710638856870683659829720033570348075856225156884017632668749118868572311819379950306739024040112393381449009678137252722851946679117797641866751951116566240884890323412691039945617547504287990544909732869742343979297185483501937933130774406843n;
-// Second big prime (1024 bits).
-const q: bigint = 113350571129461334591426767450329881356535326327593222579132777967299353626808792543281478934272286346044813387031938240916780587992812593536452474623292367872080470943598892906746651629345726935408118138705622653406680291116602897245460926769863200090374034672855301327867180944894109426731250582998877755899n;
-const r: bigint = 24n; // This is the random number we multiply by during encryption. Change at will.
-
 interface PublicKey {
     n: bigint;
-    nSqur: bigint; // makeKeys() gets angry without this.
+    nSqur: bigint;
     g: bigint;
 }
 
@@ -26,11 +22,30 @@ interface PrivateKey {
     mu: bigint;
 }
 
-const {pubKey, privKey} = makeKeys(p, q);
-
-//__END OF HARD CODED VALUES__//
-
 //__START OF NEEDED FUCNTIONS__//
+
+/**
+ * 
+ * @returns Public and private key interfaces.
+ * @brief 
+ */
+function makeKeys(): {pubKey: PublicKey; privKey: PrivateKey} {
+    const p = randPrime();
+    console.log(p);
+    const q = randPrime();
+    console.log(q);
+    const n: bigint = p * q; // First half of the public key pair.
+    const nSqur: bigint = n * n
+    const g: bigint = n + 1n; // This is the generator and second half of the public key pair.
+    const lambda: bigint = ((p - 1n) * (q - 1n)) / gcd(p - 1n, q - 1n); // LCM((p - 1), (q - 1))
+
+    const x = modPow(g, lambda, (n ** 2n));
+    const lVal = (x - 1n) / n;
+    const mu = modInverse(lVal, n);
+
+    return {pubKey: {n, nSqur, g}, privKey : {lambda, mu},}; // Return our key pairs.
+
+}
 
 /**
  * 
@@ -41,7 +56,13 @@ const {pubKey, privKey} = makeKeys(p, q);
 function encArr(msg: number[], pubKey: PublicKey): bigint[] {
     const bigArr: bigint[] = msg.map(BigInt); // Convert number array to bigint array.
 
-    return bigArr.map((m) => encrypt(m, pubKey, r)); // Encrypt each entry in the array.
+    // Encrypt each entry in the array with a new r, which is within the set of integers modulo n.
+    for (let i = 0; i < bigArr.length; i += 1) {
+        let r = genR(pubKey.n);
+        bigArr[i] = encrypt(bigArr[i], pubKey, r);
+    }
+
+    return bigArr;
 }
 
 /**
@@ -60,6 +81,8 @@ function decArr(ctxt: bigint[], pubKey: PublicKey, privKey: PrivateKey): bigint[
 
 // Uncomment and run the file to check.
 
+// const {pubKey, privKey} = makeKeys();
+
 // const inputValues: number[] = [1, 0, 0, 1, 1];
 // const encryptedValues = encArr(inputValues, pubKey);
 // const decryptedValues = decArr(encryptedValues, pubKey, privKey);
@@ -76,20 +99,6 @@ function gcd(p: bigint, q: bigint): bigint {
     }
 
     return p;
-}
-
-function makeKeys(p: bigint, q: bigint): {pubKey: PublicKey; privKey: PrivateKey} {
-    const n: bigint = p * q; // First half of the public key pair.
-    const nSqur: bigint = n * n
-    const g: bigint = n + 1n; // This is the generator and second half of the public key pair.
-    const lambda: bigint = ((p - 1n) * (q - 1n)) / gcd(p - 1n, q - 1n); // LCM((p - 1), (q - 1))
-
-    const x = modPow(g, lambda, (n ** 2n));
-    const lVal = (x - 1n) / n;
-    const mu = modInverse(lVal, n);
-
-    return {pubKey: {n, nSqur, g}, privKey : {lambda, mu},}; // Return our key pairs.
-
 }
 
 // (g^m * r^n) mod n^2
@@ -112,6 +121,47 @@ function decrypt(c: bigint, pubKey: PublicKey, privKey: PrivateKey): bigint {
     return (lVal * mu) % n;
 }
 
+function genR(i: bigint){
+    while (true) {
+    const r = randomBigIntRange(1n, i - 1n);
+    
+    if (gcd(r, i) === 1n) {
+        return r;
+    }
+  }
+}
+
+function randomBigIntRange(min: bigint, max: bigint): bigint {
+    const range = max - min + 1n;
+    const bits = range.toString(2).length;
+
+    while (true) {
+    const candidate = randomBigIntBits(bits);
+    if (candidate < range) {
+        return min + candidate;
+    }
+  }
+}
+
+//
+function randomBigIntBits(bits: number): bigint {
+    const byteLength = Math.ceil(bits / 8);
+    const bytes = new Uint8Array(byteLength);
+    globalThis.crypto.getRandomValues(bytes);
+    const excessBits = byteLength * 8 - bits;
+
+    if (excessBits > 0) {
+        bytes[0] &= 0xff >>> excessBits;
+    }
+
+    // Force the top bit to 1 so the number is guaranteed to be 'bits' wide. In this case 1024 bits.
+    const topBitMask = 1 << (7 - excessBits);
+    bytes[0] |= topBitMask;
+
+    const hex = Array.from(bytes, (b) => b.toString(16).padStart(2, "0")).join("");
+    return BigInt("0x" + hex);
+}
+
 function modPow(base: bigint, exp: bigint, mod: bigint): bigint {
     if (mod === 1n) return 0n;
     let result = 1n;
@@ -125,10 +175,11 @@ function modPow(base: bigint, exp: bigint, mod: bigint): bigint {
         b = (b * b) % mod;
         e >>= 1n;
     }
-  return result;
+
+    return result;
 }
 
-function extendedGcd(a: bigint, b: bigint): { g: bigint; x: bigint; y: bigint } {
+function extendedGcd(a: bigint, b: bigint): {g: bigint; x: bigint; y: bigint} {
     let oldr = a, r = b;
     let olds = 1n, s = 0n;
     let oldt = 0n, t = 1n;
@@ -147,4 +198,77 @@ function modInverse(a: bigint, m: bigint): bigint {
     const {x} = extendedGcd(((a % m) + m) % m, m);
 
     return ((x % m) + m) % m;
+}
+
+// Generating primes.
+
+function BigIntInRange(min: bigint, max: bigint): bigint {
+  const span = max - min + 1n;
+  const byteLength = Math.ceil(span.toString(2).length / 8);
+  const maxValid = ((1n << BigInt(byteLength * 8)) / span) * span;
+
+  while (true) {
+    const rand = BigInt("0x" + randomBytes(byteLength).toString("hex"));
+    if (rand < maxValid) {
+      return min + (rand % span);
+    }
+  }
+}
+
+function isPrime(n: bigint, k = 20): boolean {
+    if (n < 2n) return false;
+    if (n === 2n || n === 3n) return true;
+    if ((n & 1n) === 0n) return false;
+
+    let d = n - 1n;
+    let r = 0n;
+    while ((d & 1n) === 0n) {
+        d >>= 1n;
+        r += 1n;
+    }
+
+    for (let i = 0; i < k; i++) {
+        const a = BigIntInRange(2n, n - 2n);
+        let x = modPow(a, d, n);
+
+        if (x === 1n || x === n - 1n) continue;
+
+        let composite = true;
+        for (let j = 1n; j < r; j++) {
+            x = (x * x) % n;
+            if (x === n - 1n) {
+                composite = false;
+                break;
+            }
+        }
+    if (composite) return false;
+    }
+
+  return true;
+}
+
+function randPrime(bits = 1024, smallPrimes: bigint[] = []): bigint {
+    const min = (1n << BigInt(bits - 1)) + 1n;
+    const max = (1n << BigInt(bits)) - 1n;
+
+    while (true) {
+        let candidate = BigIntInRange(min, max);
+        if ((candidate & 1n) === 0n) candidate += 1n;
+        if (candidate > max) continue;
+
+    let divBySmall = false;
+    for (const p of smallPrimes) {
+        if (p * p > candidate) break;
+        if (candidate % p === 0n) {
+            divBySmall = true;
+            break;
+        }
+    }
+
+    if (divBySmall) continue;
+
+    if (isPrime(candidate, 40)) {
+      return candidate;
+    }
+  }
 }
