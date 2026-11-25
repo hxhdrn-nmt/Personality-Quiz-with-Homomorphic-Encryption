@@ -11,6 +11,11 @@ import {randomBytes} from "node:crypto";
 * I'm using the commandline commands "npx tsx <filename.ts>" to run this, hopefully this doesn't cause issues on your end and lmk if it does.
 */
 
+interface primePair {
+    p: bigint;
+    q: bigint;
+}
+
 interface PublicKey {
     n: bigint;
     nSqur: bigint;
@@ -24,14 +29,21 @@ interface PrivateKey {
 
 //__START OF NEEDED FUCNTIONS__//
 
+function findPrimes(): {primes: primePair} {
+    const p = randPrime();
+    const q = randPrime();
+
+    return {primes: {p, q}}
+}
+
 /**
  * 
  * @returns Public and private key interfaces.
  * @brief 
  */
-function makeKeys(): {pubKey: PublicKey; privKey: PrivateKey} {
-    const p = randPrime();
-    const q = randPrime();
+function makeKeys(primes: primePair): {pubKey: PublicKey; privKey: PrivateKey} {
+    const p = primes.p;
+    const q = primes.q;
     const n: bigint = p * q; // First half of the public key pair.
     const nSqur: bigint = n * n
     const g: bigint = n + 1n; // This is the generator and second half of the public key pair.
@@ -79,7 +91,9 @@ function decArr(ctxt: bigint[], pubKey: PublicKey, privKey: PrivateKey): bigint[
 
 // Uncomment and run the file to check.
 
-// const {pubKey, privKey} = makeKeys();
+// const {primes} = findPrimes();
+
+// const {pubKey, privKey} = makeKeys(primes);
 
 // const inputValues: number[] = [1, 0, 0, 1, 1];
 // const encryptedValues = encArr(inputValues, pubKey);
