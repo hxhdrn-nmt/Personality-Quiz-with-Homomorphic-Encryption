@@ -31,9 +31,7 @@ interface PrivateKey {
  */
 function makeKeys(): {pubKey: PublicKey; privKey: PrivateKey} {
     const p = randPrime();
-    console.log(p);
     const q = randPrime();
-    console.log(q);
     const n: bigint = p * q; // First half of the public key pair.
     const nSqur: bigint = n * n
     const g: bigint = n + 1n; // This is the generator and second half of the public key pair.
