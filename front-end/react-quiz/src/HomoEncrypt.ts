@@ -88,15 +88,15 @@ export function encArr(msg: number[], pubKey: PublicKey): bigint[] {
     return bigArr;
 }
 
-/**
- * 
- * @param ctxt 
- * @returns bigint[]
- * @brief Decrypt the input array.
- */
-function decArr(ctxt: bigint[], pubKey: PublicKey, privKey: PrivateKey): bigint[] {
-    return ctxt.map((c) => decrypt(c, pubKey, privKey)); // Decrypt each element in the array.
-}
+// /**
+//  * 
+//  * @param ctxt 
+//  * @returns bigint[]
+//  * @brief Decrypt the input array.
+//  */
+// function decArr(ctxt: bigint[], pubKey: PublicKey, privKey: PrivateKey): bigint[] {
+//     return ctxt.map((c) => decrypt(c, pubKey, privKey)); // Decrypt each element in the array.
+// }
 
 //__END OF NEEDED FUNCTIONS__//
 
