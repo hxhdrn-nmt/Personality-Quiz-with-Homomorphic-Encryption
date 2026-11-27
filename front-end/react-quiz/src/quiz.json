@@ -2,6 +2,16 @@
     "title": "How much do you think like a cryptanalyst?",
     "questions": [
         {
+            "question": "You are an adventurer seeking out new employment. You:",
+            "answers": [
+                "offer protection to a traveling party",
+                "help a queen plan the defenses for her new fortress",
+                "enter a contest to break out of a supposedly-impenetrable dungeon",
+                "raid the tower of an evil wizard to gain magical artifacts",
+                "retire from adventuring and open a coffee shop"
+            ]
+        },
+        {
             "question": "You're reading a book and a character says something you don't understand. You:",
             "answers": [
                 "immediately try to figure out what it's hinting at",
@@ -14,6 +24,40 @@
             "answers": [
                 "just say nice things—you're their friend, it's your job to support them, not criticize them",
                 "give them the feedback—it doesn't help them make it better if you don't tell them how it could improve"
+            ]
+        },
+        {
+            "question": "Have you ever picked a lock?",
+            "answers": [
+                "yes",
+                "no",
+                "no, but I know how"
+            ]
+        },
+        {
+            "question": "You're playing a (janky) videogame. There's a big mountain between you and your goal. You:",
+            "answers": [
+                "go around, on the intended path",
+                "try to jump between the rocks to find an unintended path over the mountain",
+                "rage quit",
+                "go into the game files and remove collisions on the mountain object so you can walk through it"
+            ]
+        },
+        {
+            "question": "Do you always try to follow the rules?",
+            "answers": [
+                "yes",
+                "almost always",
+                "no"
+            ]
+        },
+        {
+            "question": "Your friend starts using a new phrase in conversation a lot. You:",
+            "answers": [
+                "probably don't notice",
+                "notice, but don't think much about it",
+                "wonder who they picked it up from",
+                "start counting how many times they say it in a conversation"
             ]
         }
     ]

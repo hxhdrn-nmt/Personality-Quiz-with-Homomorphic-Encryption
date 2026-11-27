@@ -1,6 +1,6 @@
 import hmnum
 
-weights = [1, 5, 1, 4, 1]
+weights = [5, 5, 15, 15, 0, 10, 5, 5, 0, 15, 20, 5, 15, 5, 15, 0, 15, 0, 10, 20, 0, 5, 10, 15]
 
 def calc_results(encrypted: bool, n: int, g: int, answers: list[int]) -> int:
     if encrypted and n == 0:
@@ -15,6 +15,7 @@ def calc_results(encrypted: bool, n: int, g: int, answers: list[int]) -> int:
     for i in range(len(answers)):
         wAns = arith.makenum(answers[i]) * weights[i]
         acc += wAns
+    acc += -10   # range 10-110 -> 0-100
 
     return acc.val
 

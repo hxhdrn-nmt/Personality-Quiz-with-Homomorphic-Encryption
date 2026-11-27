@@ -11,11 +11,11 @@ class enc_arithmetic:
         return hmnum(num, self)
     
     def add(self, num1, num2): # should be hmnums
-        if num2 is int:
+        if isinstance(num2, int):
             if self.encMode:
-                return self.makenum((num1.val * num2.val) % self.NSQ)
+                return self.makenum((num1.val * pow(self.G, num2, self.NSQ)) % self.NSQ)
             else:
-                return self.makenum(num1.val + num2.val)
+                return self.makenum(num1.val + num2)
         else:
             if self.encMode:
                 return self.makenum((num1.val * num2.val) % self.NSQ)
@@ -23,11 +23,11 @@ class enc_arithmetic:
                 return self.makenum(num1.val + num2.val)
             
     def iadd(self, num1, num2):
-        if num2 is int:
+        if isinstance(num2, int):
             if self.encMode:
-                num1.val = (num1.val * num2.val) % self.NSQ
+                num1.val = (num1.val * pow(self.G, num2, self.NSQ)) % self.NSQ
             else:
-                num1.val += num2.val
+                num1.val += num2
         else:
             if self.encMode:
                 num1.val = (num1.val * num2.val) % self.NSQ
@@ -56,7 +56,7 @@ class enc_arithmetic:
         if self.encMode:
             return self.makenum(pow(self.gen_r(), self.N, self.NSQ))
         else:
-            return 0
+            return self.makenum(0)
 
 # homomorphic number: uses encrypted-side operations
 class hmnum:
@@ -80,3 +80,4 @@ class hmnum:
 
     def refresh(self):
         self += self.arithmetic.gen_0()
+

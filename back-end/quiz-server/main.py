@@ -2,12 +2,13 @@ from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import calculation
+import traceback
 
 server = FastAPI()
 
 origins = [
     "http://localhost:5173",
-    "https://hxhdrn-nmt.github.io"
+    "https://hxhdrn-nmt.github.io",
     "https://finished-excluding-afar.ngrok-free.dev",
 ]
 
@@ -48,9 +49,11 @@ def score(data: QuizAnswers) -> QuizResults:
         return QuizResults(result=str(res))
     except NameError as e:
         raise HTTPException(status_code=500, detail="Name Error: " + str(e))
-    except ValueError:
-        raise HTTPException(status_code=500, detail="Value Error")
-    except ZeroDivisionError:
-        raise HTTPException(status_code=500, detail="Zero Division Error")
+    except ValueError as e:
+        raise HTTPException(status_code=500, detail="Value Error: " + str(e))
+    except ZeroDivisionError as e:
+        raise HTTPException(status_code=500, detail="Zero Division Error: " + str(e))
+    except AttributeError as e:
+        raise HTTPException(status_code=500, detail="Attribute Error: " + str(e) + "\n" + traceback.format_exc())
     except Exception as e:
         raise HTTPException(status_code=500, detail="Unknown Server Error: " + str(e))
