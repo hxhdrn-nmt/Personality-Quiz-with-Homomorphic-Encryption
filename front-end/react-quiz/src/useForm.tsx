@@ -1,6 +1,6 @@
 import { useState } from "react";
 
-type FormAnswers = Array<Array<0 | 1>>;
+export type FormAnswers = Array<Array<0 | 1>>;
 
 // Custom state that represents a list of multiple choice answers as an array of numbers
 // Each number is the index of the answer to the question at that position
