@@ -7,6 +7,7 @@ server = FastAPI()
 
 origins = [
     "http://localhost:5173",
+    "https://hxhdrn-nmt.github.io/Personality-Quiz-with-Homomorphic-Encryption/"
     "https://finished-excluding-afar.ngrok-free.dev",
 ]
 
