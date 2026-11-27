@@ -96,7 +96,7 @@ function Quiz() {
         const {submission, keys} = createSubmission(answers);
         pubKey = keys.pubKey;
         privKey = keys.privKey;
-        const body = JSON.stringify(submission, (_key, value) => typeof(value) === "bigint" ? JSON.rawJSON(value.toString()) : value);
+        const body = JSON.stringify(submission, (_key, value) => typeof(value) === "bigint" ? value.toString() : value);
         const response = await fetch("https://finished-excluding-afar.ngrok-free.dev/results/", {
           method: "POST",
           headers: {
