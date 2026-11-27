@@ -1,4 +1,4 @@
-import {randomBytes} from "node:crypto";
+// import {randomBytes} from "node:crypto";
 // TODO: Push changes after verifying everything works as it should be.
 
 // Public key pair: (n, g), although technically (n, n^2, g) for this implementation.
@@ -11,20 +11,33 @@ import {randomBytes} from "node:crypto";
 * I'm using the commandline commands "npx tsx <filename.ts>" to run this, hopefully this doesn't cause issues on your end and lmk if it does.
 */
 
+// replaces node:crypto with browser's web crypto api
+function randomBytes(size: number): Uint8Array {
+  const bytes = new Uint8Array(size);
+  globalThis.crypto.getRandomValues(bytes);
+  return bytes;
+}
+
 interface primePair {
     p: bigint;
     q: bigint;
 }
 
-interface PublicKey {
+export interface PublicKey {
     n: bigint;
     nSqur: bigint;
     g: bigint;
 }
 
-interface PrivateKey {
+export interface PrivateKey {
     lambda: bigint;
     mu: bigint;
+}
+
+// full key generation usable by app
+export function genKeys() : {pubKey: PublicKey, privKey: PrivateKey} {
+    const primes = findPrimes();
+    return makeKeys(primes.primes);
 }
 
 //__START OF NEEDED FUCNTIONS__//
@@ -63,7 +76,7 @@ function makeKeys(primes: primePair): {pubKey: PublicKey; privKey: PrivateKey} {
  * @returns bigint[]
  * @brief Encrypt the input array.
  */
-function encArr(msg: number[], pubKey: PublicKey): bigint[] {
+export function encArr(msg: number[], pubKey: PublicKey): bigint[] {
     const bigArr: bigint[] = msg.map(BigInt); // Convert number array to bigint array.
 
     // Encrypt each entry in the array with a new r, which is within the set of integers modulo n.
@@ -123,7 +136,7 @@ function encrypt(m: bigint, pubKey: PublicKey, randNum: bigint): bigint {
 }
 
 // (L(c^lambda mod n^2) * mu) mod n
-function decrypt(c: bigint, pubKey: PublicKey, privKey: PrivateKey): bigint {
+export function decrypt(c: bigint, pubKey: PublicKey, privKey: PrivateKey): bigint {
     const {n, nSqur} = pubKey;
     const {lambda, mu} = privKey;
 
@@ -220,7 +233,7 @@ function BigIntInRange(min: bigint, max: bigint): bigint {
   const maxValid = ((1n << BigInt(byteLength * 8)) / span) * span;
 
   while (true) {
-    const rand = BigInt("0x" + randomBytes(byteLength).toString("hex"));
+    const rand = BigInt("0x" + Array.from(randomBytes(byteLength), (b) => b.toString(16).padStart(2, '0')).join(''));
     if (rand < maxValid) {
       return min + (rand % span);
     }

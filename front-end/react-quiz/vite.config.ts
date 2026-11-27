@@ -6,5 +6,9 @@ export default defineConfig({
   plugins: [react()],
   build: {
     sourcemap: true,
-  }
+  },
+  server: {
+    allowedHosts: ['finished-excluding-afar.ngrok-free.dev']
+  },
+  base: '/'
 })

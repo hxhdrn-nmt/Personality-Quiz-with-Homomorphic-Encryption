@@ -1,0 +1,10 @@
+[project]
+name = "quiz-server"
+version = "0.1.0"
+requires-python = ">=3.13"
+dependencies = [
+    "fastapi[standard]>=0.165.0",
+    "uvicorn[standard]>=0.54.0",
+]
+[tool.fastapi]
+entrypoint = "main:server"
