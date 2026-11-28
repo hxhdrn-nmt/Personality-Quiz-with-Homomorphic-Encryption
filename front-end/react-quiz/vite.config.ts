@@ -10,5 +10,5 @@ export default defineConfig({
   server: {
     allowedHosts: ['finished-excluding-afar.ngrok-free.dev']
   },
-  base: '/Personality-Quiz-with-Homomorphic-Encryption/'
+  base: '/Quiz/'
 })
