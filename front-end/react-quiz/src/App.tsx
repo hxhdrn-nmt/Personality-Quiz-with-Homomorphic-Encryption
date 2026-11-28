@@ -67,7 +67,10 @@ function QuizQuestion(questionData: { index: number, question: string; answers: 
 // The results to the quiz (shown after submit is pressed)
 function QuizResults(result: {result: number}) {
   return (
-    <p>You are {result.result}% Cryptanalyst!</p>
+    <>
+      <p>You are {result.result}% Cryptanalyst!</p>
+      <a href="https://forms.gle/y5511AV5957LYdyX9">Please take the Experience Survey</a>
+    </>
   );
 }
 
