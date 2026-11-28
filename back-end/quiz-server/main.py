@@ -3,6 +3,7 @@ from fastapi.middleware.cors import CORSMiddleware
 from pydantic import BaseModel
 import calculation
 import traceback
+import time
 
 server = FastAPI()
 
@@ -43,9 +44,12 @@ class QuizResults(BaseModel):
 @server.post("/results/")
 def score(data: QuizAnswers) -> QuizResults:
     try:
+        start = time.time_ns()
         res = calculation.calc_results(data.encrypted, data.n, data.g, data.answers)
         if (res == -1):
             raise HTTPException(status_code=400, detail="Data Error")
+        end = time.time_ns()
+        print(("encrypted " if data.encrypted else "unencrypted ") + "time: " + str((end - start) / 1000000))
         return QuizResults(result=str(res))
     except NameError as e:
         raise HTTPException(status_code=500, detail="Name Error: " + str(e))
