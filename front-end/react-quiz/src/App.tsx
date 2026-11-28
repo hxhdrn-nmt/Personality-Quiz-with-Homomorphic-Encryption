@@ -120,6 +120,7 @@ function Quiz() {
 
       } catch (err) {
         console.error("POST Error:", err);
+        setErrorMsg("Server Error: are you sure the server is running?")
       }
     }
   }
@@ -157,7 +158,7 @@ function Quiz() {
       {result != -1 && <QuizResults result={result} /> }
 
       {/* show error message if error is set */}
-      {errorMsg != "" && <p>{errorMsg}</p>}
+      {errorMsg != "" && <p style={{marginBottom: '20px'}}>{errorMsg}</p>}
     </>
   );
 }
