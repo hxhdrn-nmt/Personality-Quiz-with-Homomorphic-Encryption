@@ -40,6 +40,12 @@ export function genKeys() : {pubKey: PublicKey, privKey: PrivateKey} {
     return makeKeys(primes.primes);
 }
 
+// encrypt with random generation usable by testing
+export function encryptNum(num: bigint, pubKey: PublicKey) {
+    const r = genR(pubKey.n);
+    return encrypt(num, pubKey, r);
+}
+
 //__START OF NEEDED FUCNTIONS__//
 
 function findPrimes(): {primes: primePair} {
