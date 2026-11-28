@@ -67,10 +67,10 @@ function QuizQuestion(questionData: { index: number, question: string; answers: 
 // The results to the quiz (shown after submit is pressed)
 function QuizResults(result: {result: number}) {
   return (
-    <>
-      <p>You are {result.result}% Cryptanalyst!</p>
+    <div style={{marginBottom: '30px', marginTop: '30px'}}>
+      <h1>You are {result.result}% Cryptanalyst!</h1>
       <a href="https://forms.gle/y5511AV5957LYdyX9">Please take the Experience Survey</a>
-    </>
+    </div>
   );
 }
 
@@ -145,10 +145,12 @@ function Quiz() {
 
   return (
     <>
+      <h1>How much of a cryptanalyst are you?</h1>
+      <p>Take the quiz to find out!</p>
       {/* actual form defined here */}
       <form onSubmit={onSubmit}>
         {quizQuestions}
-        <button type="submit">Submit</button>
+        <button type="submit" style={{marginTop: '20px', marginBottom: '20px', color: 'darkslategray', paddingTop: '5px', paddingBottom: '5px', paddingLeft: '10px', paddingRight: '10px', fontWeight: 'bold'}}>Submit</button>
       </form>
 
       {/* only show quiz results after submit button clicked (lazy eval && does this) */}
